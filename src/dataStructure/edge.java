@@ -1,18 +1,27 @@
 package dataStructure;
 
-import utils.Point3D;
-
 public class edge implements edge_data {
     private int src;
     private int dest;
     private double weight;
     private int tag;
 
-    @Override
-    public int getSrc() {
+    public edge(edge e) {
+        this.src=e.src;
+        this.dest=e.dest;
+        this.tag =e.tag;
+        this.weight =e.weight;
+    }
 
-    return this.src;
-}
+    public edge(int src, int dest, double w) {
+        this.src=src;
+        this.dest=dest;
+       this.weight=w;
+       this.tag=0;
+    }
+
+    @Override
+    public int getSrc() { return this.src; }
     @Override
     public int getDest() {
         return this.dest;
@@ -27,6 +36,10 @@ public class edge implements edge_data {
     public String getInfo() {
         return "src:"+this.src+" dest:"+this.dest+" weight:"+this.weight+" tag:"+this.tag;
     }
+    public String toString() {
+        return "src:"+this.src+" dest:"+this.dest+" weight:"+this.weight+" tag:"+this.tag;
+    }
+
 
     @Override
     public void setInfo(String s) {

@@ -1,5 +1,7 @@
 package dataStructure;
 
+import utils.Point3D;
+
 public class edge implements edge_data {
     private int src;
     private int dest;
@@ -23,13 +25,19 @@ public class edge implements edge_data {
 
     @Override
     public String getInfo() {
-        return "src:"+this.src+" dest:"+this.dest+" weight:"+this.weight;
+        return "src:"+this.src+" dest:"+this.dest+" weight:"+this.weight+" tag:"+this.tag;
     }
 
     @Override
     public void setInfo(String s) {
-// ממתינה שאנשים יעשו ויהיו תשובות
+        String str = s;
+        String[] splitData = str.split("[:\\ ]");
+        src = Integer.parseInt(splitData[1]);
+        dest = Integer.parseInt(splitData[3]);
+        weight = Double.parseDouble(splitData[5]);
+        tag = Integer.parseInt(splitData[7]);
     }
+
 
     @Override
     public int getTag() {

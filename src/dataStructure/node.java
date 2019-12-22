@@ -39,19 +39,20 @@ public class node implements node_data {
 
     @Override
     public String getInfo() {
-        return "key:"+this.key+" location:"+this.location+" weight:"+this.weight;
+        return "key:"+this.key+" location:"+this.location+" weight:"+this.weight+" tag:"+this.tag;
     }
 
     @Override
     public void setInfo(String s) {
         String str = s;
         String[] splitData = str.split("[:\\ ]");
-        //אופציה ליישום :
-        //return "key:"+this.key+" location:"+this.location+" weight:"+this.weight;
-        //         0          1        2              3          4          5
+            key = Integer.parseInt(splitData[1]);
+            location = new Point3D(splitData[3]);
+            weight = Double.parseDouble(splitData[5]);
+            tag = Integer.parseInt(splitData[7]);
+        }
 
 
-    }
 
     @Override
     public int getTag() {

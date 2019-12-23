@@ -1,11 +1,16 @@
 package JUnitTesting;
 import dataStructure.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.Point3D;
 import static org.junit.jupiter.api.Assertions.*;
 class DGraphTest {
     static DGraph graph = new DGraph();
+    @BeforeEach
+     void init(){
+        graph = new DGraph();
+    }
     @Test
     void getNode() {
         graph.addNode(new node(13,new Point3D(2,2,2),0));

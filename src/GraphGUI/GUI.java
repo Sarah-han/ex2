@@ -1,16 +1,32 @@
 package GraphGUI;
 import dataStructure.*;
 import utils.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 
-public class GUI extends JFrame  {
-
-    LinkedList<Point3D> points = new LinkedList<Point3D>();
+public class GUI extends JFrame implements ActionListener {
+    private static DGraph graph;
+    public static void main(String[] args)
+    {
+        graph=new DGraph();
+        graph.addNode(new node(10,new Point3D(100,100,150),0));
+        graph.addNode(new node(11,new Point3D(135,125,130),0));
+        graph.addNode(new node(12,new Point3D(120,300,200),0));
+        graph.addNode(new node(13,new Point3D(150,200,100),0));
+        graph.addNode(new node(14,new Point3D(75,250,250),0));
+        graph.connect(10,13,0);
+        graph.connect(10,14,0);
+        graph.connect(11,10,0);
+        graph.connect(11,13,0);
+        graph.connect(12,11,0);
+        graph.connect(13,14,1);
+        graph.connect(13,12,1.5);
+        graph.connect(14,13,0);
+        GUI gui = new GUI();
+        gui.setVisible(true);
+    }
     public GUI()
     {
         INITGUI();
@@ -18,26 +34,50 @@ public class GUI extends JFrame  {
     private void INITGUI(){
         this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MenuBar MB=new MenuBar();this.setMenuBar(MB);
+        Menu File = new Menu("File"); MB.add(File);
+        Menu Algo = new Menu("Algo"); MB.add(Algo);
+        MenuItem Save = new MenuItem("Save");
+        MenuItem Load = new MenuItem("Load");
+        MenuItem TSP = new MenuItem("TSP");
+        MenuItem ShortestPath = new MenuItem("ShortestPath");
+        MenuItem isConnected = new MenuItem("isConnected");
+        File.add(Save);File.add(Load);Algo.add(TSP);Algo.add(ShortestPath);Algo.add(isConnected);
+        Save.addActionListener(this);
+        Load.addActionListener(this);
+        TSP.addActionListener(this);
+        ShortestPath.addActionListener(this);
+        isConnected.addActionListener(this);
     }
     public void paint(Graphics g)
     {
         super.paint(g);
+        for(node_data nodes : graph.getV()) {
+            Point3D nodes_src = nodes.getLocation();
+            g.setColor(Color.BLUE);
+            g.fillOval((int)nodes_src.x()-5, (int)nodes_src.y()-5, 10, 10);
+            g.drawString(""+ nodes.getKey(), (int)nodes_src.x(),(int)(nodes_src.y()+20));
 
-        Point3D prev = null;
+            for(edge_data edges : graph.getE(nodes.getKey())) {
+                g.setColor(Color.RED);
+                Point3D nodes_dest = graph.getNode(edges.getDest()).getLocation();
+                g.drawLine((int)nodes_src.x(), (int)nodes_src.y(), (int)nodes_dest.x(), (int)nodes_dest.y());
+                int mid_of_edge_x=(int) ((nodes_src.x()+nodes_dest.x())/2);
+                int mid_of_edge_y=(int) ((nodes_src.y()+nodes_dest.y())/2);
+                g.drawString(""+ edges.getWeight(), mid_of_edge_x, mid_of_edge_y);
 
-        for (Point3D p : points)
-        {
-            g.setColor(Color.MAGENTA);
-            g.fillOval((int)p.x(), (int)p.y(), 10, 10);
-
-            if(prev != null)
-            {
-                g.setColor(Color.BLACK);
-                g.drawLine((int)p.x(), (int)p.y(), (int)prev.x(), (int)prev.y());
-
-                g.drawString("5", (int)((p.x()+prev.x())/2),(int)((p.y()+prev.y())/2));
+                g.setColor(Color.YELLOW);
             }
-            prev = p;
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String str=e.getActionCommand();
+        if(str.equals("Save")){ }
+        if(str.equals("Load")){ }
+        if(str.equals("TSP")){ }
+        if(str.equals("isConnected")){ }
+        if(str.equals("ShortestPath")){ }
     }
 }

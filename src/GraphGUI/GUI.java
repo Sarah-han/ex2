@@ -55,7 +55,7 @@ public class GUI extends JFrame implements ActionListener {
         for(node_data nodes : graph.getV()) {
             Point3D nodes_src = nodes.getLocation();
             g.setColor(Color.BLUE);
-            g.fillOval((int)nodes_src.x()-5, (int)nodes_src.y()-5, 10, 10);
+            g.fillOval((int)nodes_src.x()-7, (int)nodes_src.y()-7, 15, 15);
             g.drawString(""+ nodes.getKey(), (int)nodes_src.x(),(int)(nodes_src.y()+20));
 
             for(edge_data edges : graph.getE(nodes.getKey())) {
@@ -67,6 +67,9 @@ public class GUI extends JFrame implements ActionListener {
                 g.drawString(""+ edges.getWeight(), mid_of_edge_x, mid_of_edge_y);
 
                 g.setColor(Color.YELLOW);
+                int directed_x = (int) (nodes_src.x()*0.15+nodes_dest.x()*0.85);
+                int directed_y = (int) (nodes_src.y()*0.15+nodes_dest.y()*0.85);
+                g.fillOval(directed_x-5,directed_y-5,10,10);
             }
         }
     }

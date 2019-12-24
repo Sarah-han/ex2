@@ -43,10 +43,12 @@ public class DGraph implements graph {
 
 	@Override
 	public void connect(int src, int dest, double w) {
+		boolean b=true;
 		if (src == dest) {
-			throw new RuntimeException("src and dest are THE SAME!");
+			System.out.println("src and dest are the same");
+			b=false;
 		}
-		if (!(HashNode.get(src) == null) || !(HashNode.get(dest) == null)) {
+		if (b||(!(HashNode.get(src) == null) || !(HashNode.get(dest) == null))) {
 			if (HashEdge.containsKey(src)) {
 				if (HashEdge.get(src).get(dest) != null) {
 					throw new RuntimeException("The edge is already exist!");
@@ -63,7 +65,7 @@ public class DGraph implements graph {
 				MC++;
 				EdgeSize++;
 			}
-		} else throw new RuntimeException("src/dest does not exist!");
+		} else if(b){throw new RuntimeException("src/dest does not exist!");}
 	}
 
 	@Override

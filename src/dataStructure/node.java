@@ -78,7 +78,11 @@ public class node implements node_data {
 
     @Override
     public void setTag(int t) {
-        this.tag=t;
-
+        if(t==0||t==1) {
+            this.tag = t;
+        }
+        else {
+            throw new RuntimeException("Invalid tag Num!");
+        }
     }
 }

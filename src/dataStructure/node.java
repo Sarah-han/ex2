@@ -30,10 +30,8 @@ public class node implements node_data {
 
     @Override
     public Point3D getLocation() {
-        if (this.location != null)
-            return this.location;
-        else
-            return null;
+        if (this.location != null) return this.location;
+        else return null;
     }
 
     @Override
@@ -77,12 +75,5 @@ public class node implements node_data {
     }
 
     @Override
-    public void setTag(int t) {
-        if(t==0||t==1) {
-            this.tag = t;
-        }
-        else {
-            throw new RuntimeException("Invalid tag Num!");
-        }
-    }
+    public void setTag(int t) { this.tag = t; }
 }

@@ -66,10 +66,10 @@ public class GUI extends JFrame implements ActionListener {
                 int mid_of_edge_y=(int) ((nodes_src.y()+nodes_dest.y())/2);
                 g.drawString(""+ edges.getWeight(), mid_of_edge_x, mid_of_edge_y);
 
-                g.setColor(Color.YELLOW);
+                g.setColor(Color.BLACK);
                 int directed_x = (int) (nodes_src.x()*0.15+nodes_dest.x()*0.85);
                 int directed_y = (int) (nodes_src.y()*0.15+nodes_dest.y()*0.85);
-                g.fillOval(directed_x-5,directed_y-5,10,10);
+                g.fillOval(directed_x-4,directed_y,7,7);
             }
         }
     }

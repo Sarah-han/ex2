@@ -4,6 +4,8 @@ import java.util.*;
 
 import dataStructure.*;
 
+import javax.swing.text.html.HTMLDocument;
+
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
@@ -64,31 +66,104 @@ private static DGraph graph;
 
 	@Override
 	public boolean isConnected() {
+		int conutTag=0;boolean b=true;
+		for (node_data nd:graph.getV()) {
+			nd.setTag(0);
+		}
+		Queue<Integer> q=new PriorityQueue<>();
+		Iterator<node_data>ite=graph.getV().iterator();
+		node_data first=ite.next();
+		q.add(first.getKey());
+		while(!q.isEmpty()||b){
+			int peek=q.peek();
+
+			for (edge_data e:graph.getE(peek)) {
+				if(graph.getNode(e.getDest()).getKey()!=first.getKey()) {
+					graph.getNode(e.getDest()).setTag(1);
+					conutTag++;
+					q.add(e.getDest());
+				}
+				else{
+					first.setTag(1);
+					conutTag++;
+					b=false;
+					break;
+				}
+			}
+			q.poll();
+		}
+		if(conutTag==graph.nodeSize()){
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		// TODO Auto-generated method stub
-		return 0;
+		double TotalWeight=0;
+		List<node_data>NodeList=new LinkedList<>();
+		NodeList=shortestPath(src, dest);
+		Iterator<node_data>ite=NodeList.iterator();
+		while(ite.hasNext()){
+			TotalWeight+=ite.next().getWeight();
+		}
+		return TotalWeight;
 	}
-
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
+		List<node_data> Path=new LinkedList<>();
+		Queue<Integer> q=new PriorityQueue<>();
+		for (node_data nd:graph.getV()) {
+			nd.setTag(0);
+			nd.setWeight(Integer.MAX_VALUE);
+		}
+		graph.getNode(src).setTag(src);
+		graph.getNode(src).setWeight(0);
+		q.add(src);
+		while(!q.isEmpty()){
+			int peek=q.peek();
+			if(graph.getE(peek).size()!=0) {
+				for (edge_data e : graph.getE(peek)) {
+					if (graph.getNode(e.getDest()).getWeight() > e.getWeight() + graph.getNode(e.getSrc()).getWeight()) { //check if edge+node we came from weight is less then our node
+						graph.getNode(e.getDest()).setTag(peek); //changing tag to the node we came from
+						double RecentWeight = graph.getNode(e.getSrc()).getWeight(); //recent node weight
+						graph.getNode(e.getDest()).setWeight(RecentWeight + e.getWeight()); //changing node weight to recent node weight+edge weight
+						q.add(e.getDest());
+					}
+				}
+				q.poll();
+			}
+			else { q.poll(); }
+		}
+		Path.add(graph.getNode(dest));
+		int tempKey=graph.getNode(dest).getTag();
+		while(tempKey!=src) {
+			Path.add(graph.getNode(tempKey));
+			tempKey=graph.getNode(tempKey).getTag();
+		}
+		Path.add(graph.getNode(src));
+		return Path;
 	}
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public graph copy() {
-		// TODO Auto-generated method stub
-		return null;
+		DGraph graphcopy=new DGraph();
+		Collection<node_data> nodescopy=graph.getV();
+		for (node_data ND:nodescopy) {
+			node_data temp=new node((node)ND);
+			graphcopy.addNode(temp);
+		}
+		for (node_data ND:nodescopy) {
+			Collection<edge_data> edgescopy = graph.getE(ND.getKey());
+			for (edge_data ED : edgescopy) {
+				graphcopy.connect(ED.getSrc(),ED.getDest(),ED.getWeight());
+			}
+		}
+		return graphcopy;
 	}
-
 }

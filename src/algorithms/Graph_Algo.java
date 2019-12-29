@@ -13,10 +13,10 @@ import javax.swing.text.html.HTMLDocument;
  *
  */
 public class Graph_Algo implements graph_algorithms{
-private static DGraph graph;
+private DGraph graph;
 	@Override
 	public void init(graph g) {
-		this.graph=new DGraph();
+		graph=new DGraph();
 		for(node_data nodes : g.getV()){
 			graph.addNode(nodes);
 			for(edge_data edges : g.getE(nodes.getKey())){
@@ -26,7 +26,7 @@ private static DGraph graph;
 	}
 	@Override
 	public void init(String file_name) {
-		this.graph=new DGraph();
+		graph=new DGraph();
 		try
 		{
 			FileInputStream file = new FileInputStream(file_name);
@@ -53,7 +53,7 @@ private static DGraph graph;
 		{
 			FileOutputStream file = new FileOutputStream(file_name);
 			ObjectOutputStream out = new ObjectOutputStream(file);
-			out.writeObject(this.graph);
+			out.writeObject(graph);
 			out.close();
 			file.close();
 			System.out.println("Graph has been serialized");
@@ -147,10 +147,34 @@ private static DGraph graph;
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		return null;
+		List<node_data> ans=null;
+		boolean initialadd=false;
+		node_data temp=null;
+		if(isConnected()){
+			Iterator<Integer>ite =targets.iterator();
+			while(ite.hasNext()){
+				if(!initialadd) {
+					temp=graph.getNode(ite.next());
+					ans.add(temp);
+					initialadd=true;
+				}
+				double MinLengthNodeLength=Integer.MAX_VALUE;
+				int MinLengthNode=0;
+				for (node_data nd:graph.getV()) {
+					if(shortestPathDist(temp.getKey(),nd.getKey())<MinLengthNodeLength){
+						MinLengthNode=nd.getKey();
+						MinLengthNodeLength=nd.getWeight();
+					}
+				}
+				ans.add(graph.getNode(MinLengthNode));
+				temp=graph.getNode(MinLengthNode);
+			}
+		}
+		return ans;
 	}
 
 	@Override
+
 	public graph copy() {
 		DGraph graphcopy=new DGraph();
 		Collection<node_data> nodescopy=graph.getV();

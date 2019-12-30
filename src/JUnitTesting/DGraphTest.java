@@ -177,5 +177,15 @@ class DGraphTest {
         graph.connect(14,13,0);
         assertEquals(13,graph.getMC());
     }
+    @Test
+    void setInfo(){
+        graph.addNode(new node(11,new Point3D(2,2,2),3.5));
+        Point3D p =new Point3D(3,6,9);
+        node_data temp=new node(3, p,8);
+        System.out.println(temp);
+        temp.setInfo(graph.getNode(11).toString());
+        System.out.println(graph.getNode(11).toString());
+        System.out.println(temp);
+    }
 }
 

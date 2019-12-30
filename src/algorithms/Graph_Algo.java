@@ -19,8 +19,13 @@ private DGraph graph;
 		graph=new DGraph();
 		for(node_data nodes : g.getV()){
 			graph.addNode(nodes);
-			for(edge_data edges : g.getE(nodes.getKey())){
-				graph.connect(edges.getSrc(),edges.getDest(),Integer.MAX_VALUE);
+			try {
+				for (edge_data edges : g.getE(nodes.getKey())) {
+					graph.connect(edges.getSrc(), edges.getDest(), edges.getWeight());
+				}
+			}
+			catch (Exception e){
+				//this node has no edges, the graph is still being initialized...
 			}
 		}
 	}
@@ -66,33 +71,31 @@ private DGraph graph;
 
 	@Override
 	public boolean isConnected() {
-		int conutTag=0;boolean b=true;
-		for (node_data nd:graph.getV()) {
+		int conutTag = 0;
+		boolean NullSrcNode = true;
+		for (node_data nd : graph.getV()) {
 			nd.setTag(0);
 		}
-		Queue<Integer> q=new PriorityQueue<>();
-		Iterator<node_data>ite=graph.getV().iterator();
-		node_data first=ite.next();
+		Queue<Integer> q = new LinkedList<>();
+		node_data first = graph.getV().iterator().next();
 		q.add(first.getKey());
-		while(!q.isEmpty()||b){
-			int peek=q.peek();
-
-			for (edge_data e:graph.getE(peek)) {
-				if(graph.getNode(e.getDest()).getKey()!=first.getKey()) {
-					graph.getNode(e.getDest()).setTag(1);
-					conutTag++;
-					q.add(e.getDest());
+		while (!q.isEmpty()) {
+			int peek = q.peek();
+			try {
+				for (edge_data e : graph.getE(peek)) {
+					if (graph.getNode(e.getDest()).getTag() == 0) {
+						graph.getNode(e.getDest()).setTag(1);
+						conutTag++;
+						q.add(e.getDest());
+					}
 				}
-				else{
-					first.setTag(1);
-					conutTag++;
-					b=false;
-					break;
-				}
+				q.poll();
+			} catch (Exception e) {
+				//this node has no edges
+				NullSrcNode = false;
 			}
-			q.poll();
 		}
-		if(conutTag==graph.nodeSize()){
+		if (conutTag == graph.nodeSize() && NullSrcNode) {
 			return true;
 		}
 		return false;
@@ -100,19 +103,13 @@ private DGraph graph;
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		double TotalWeight=0;
-		List<node_data>NodeList=new LinkedList<>();
-		NodeList=shortestPath(src, dest);
-		Iterator<node_data>ite=NodeList.iterator();
-		while(ite.hasNext()){
-			TotalWeight+=ite.next().getWeight();
-		}
-		return TotalWeight;
+		List<node_data> ans=shortestPath(src,dest);
+		return ans.get(ans.size()-1).getWeight();
 	}
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> Path=new LinkedList<>();
-		Queue<Integer> q=new PriorityQueue<>();
+		Queue<Integer> q=new LinkedList<>();
 		for (node_data nd:graph.getV()) {
 			nd.setTag(0);
 			nd.setWeight(Integer.MAX_VALUE);
@@ -122,7 +119,7 @@ private DGraph graph;
 		q.add(src);
 		while(!q.isEmpty()){
 			int peek=q.peek();
-			if(graph.getE(peek).size()!=0) {
+			try {
 				for (edge_data e : graph.getE(peek)) {
 					if (graph.getNode(e.getDest()).getWeight() > e.getWeight() + graph.getNode(e.getSrc()).getWeight()) { //check if edge+node we came from weight is less then our node
 						graph.getNode(e.getDest()).setTag(peek); //changing tag to the node we came from
@@ -133,7 +130,10 @@ private DGraph graph;
 				}
 				q.poll();
 			}
-			else { q.poll(); }
+			catch(Exception e) { q.poll(); }
+		}
+		if(graph.getNode(dest).getTag()==0&&graph.getNode(dest).getWeight()==Integer.MAX_VALUE){
+			return null;
 		}
 		Path.add(graph.getNode(dest));
 		int tempKey=graph.getNode(dest).getTag();
@@ -142,33 +142,36 @@ private DGraph graph;
 			tempKey=graph.getNode(tempKey).getTag();
 		}
 		Path.add(graph.getNode(src));
-		return Path;
+		LinkedList<node_data> ans=new LinkedList<>();
+		for (int i = Path.size()-1; i >= 0; i--) {
+			ans.add(Path.get(i));
+		}
+		return ans;
 	}
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		List<node_data> ans=null;
-		boolean initialadd=false;
-		node_data temp=null;
+		List<node_data> ans=new LinkedList<>();
+		node_data temp=graph.getNode(targets.get(0));
+		ans.add(temp);
 		if(isConnected()){
-			Iterator<Integer>ite =targets.iterator();
-			while(ite.hasNext()){
-				if(!initialadd) {
-					temp=graph.getNode(ite.next());
-					ans.add(temp);
-					initialadd=true;
-				}
+			while(ans.size()!=targets.size()){
 				double MinLengthNodeLength=Integer.MAX_VALUE;
 				int MinLengthNode=0;
 				for (node_data nd:graph.getV()) {
-					if(shortestPathDist(temp.getKey(),nd.getKey())<MinLengthNodeLength){
-						MinLengthNode=nd.getKey();
-						MinLengthNodeLength=nd.getWeight();
+					if (shortestPathDist(temp.getKey(), nd.getKey()) < MinLengthNodeLength&&nd.getKey()!=temp.getKey()&&targets.contains(nd.getKey())&&!ans.contains(nd)) {
+						MinLengthNode = nd.getKey();
+						MinLengthNodeLength = nd.getWeight();
 					}
 				}
 				ans.add(graph.getNode(MinLengthNode));
 				temp=graph.getNode(MinLengthNode);
 			}
+			/*for (int i = 0; i < ans.size()-1; i++) {
+				if (ans.get(i).getKey() == ans.get(i+1).getKey()) {
+					ans.remove(i + 1);
+				}
+			}*/
 		}
 		return ans;
 	}
@@ -184,8 +187,13 @@ private DGraph graph;
 		}
 		for (node_data ND:nodescopy) {
 			Collection<edge_data> edgescopy = graph.getE(ND.getKey());
-			for (edge_data ED : edgescopy) {
-				graphcopy.connect(ED.getSrc(),ED.getDest(),ED.getWeight());
+			try {
+				for (edge_data ED : edgescopy) {
+					graphcopy.connect(ED.getSrc(), ED.getDest(), ED.getWeight());
+				}
+			}
+			catch (Exception e){
+				//this node has no edges, the graph is still being initialized...
 			}
 		}
 		return graphcopy;

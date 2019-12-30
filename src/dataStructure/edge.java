@@ -6,11 +6,11 @@ public class edge implements edge_data {
     private double weight;
     private int tag;
 
-    public edge(edge e) {
-        this.src=e.src;
-        this.dest=e.dest;
-        this.tag =e.tag;
-        this.weight =e.weight;
+    public edge(edge ed) {
+        this.src=ed.src;
+        this.dest=ed.dest;
+        this.tag =ed.tag;
+        this.weight =ed.weight;
     }
 
     public edge(int src, int dest, double w) {

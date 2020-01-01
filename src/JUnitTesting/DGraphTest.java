@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DGraphTest {
     static DGraph graph = new DGraph();
     @BeforeEach
-     void init(){
+    void init(){
         graph = new DGraph();
     }
     @Test

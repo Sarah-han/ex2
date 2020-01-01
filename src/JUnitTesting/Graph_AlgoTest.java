@@ -23,13 +23,12 @@ class Graph_AlgoTest {
         ga.addNode(new node(12, new Point3D(120, 300, 200), 0));
         ga.addNode(new node(13, new Point3D(150, 200, 100), 0));
         ga.addNode(new node(14, new Point3D(75, 250, 250), 0));
-        ga.connect(10, 13, 4);
         ga.connect(10, 11, 4.5);
         ga.connect(10, 14, 1);
         ga.connect(11, 13, 5);
         ga.connect(12, 11, 17);
         ga.connect(13, 14, 1);
-        ga.connect(13, 11, 1.5);
+        ga.connect(13, 11, 20.5);
         ga.connect(13, 12, 1.5);
         ga.connect(14, 13, 2);
         TestGraph.init(ga);
@@ -60,12 +59,13 @@ class Graph_AlgoTest {
     @Test
     void TSP() {
         ga.connect(11, 10, 4.5);
+        ga.connect(13, 10, 8);
         TestGraph.init(ga);
         List<Integer>lst=new LinkedList<>();
         lst.add(10);
         lst.add(13);
         lst.add(14);
-        lst.add(12);
+        lst.add(11);
         System.out.println(TestGraph.TSP(lst));
     }
 
@@ -74,6 +74,6 @@ class Graph_AlgoTest {
         graph g=new DGraph();
         g=TestGraph.copy();
         assertEquals(g.nodeSize(),5);
-        assertEquals(g.edgeSize(),9);
+        assertEquals(g.edgeSize(),8);
     }
 }

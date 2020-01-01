@@ -1,4 +1,6 @@
 package dataStructure;
+
+import java.io.Serializable;
 /**
  * this class implements the interface edge data.
  * represents the set of operations applicable on a
@@ -7,9 +9,7 @@ package dataStructure;
  * @author :Sarah-han
  *
  */
-
-
-public class edge implements edge_data {
+public class edge implements edge_data, Serializable {
     /**
      * private data types of the class
      * int node src id.
@@ -21,7 +21,6 @@ public class edge implements edge_data {
     private int dest;
     private double weight;
     private int tag;
-
     /**
      * copy constructor.
      * @param ed - the edge which we copy the data from.
@@ -36,12 +35,11 @@ public class edge implements edge_data {
      * Default constructor
      * require int src, int dest, double w.
      */
-
     public edge(int src, int dest, double w) {
         this.src=src;
         this.dest=dest;
-       this.weight=w;
-       this.tag=0;
+        this.weight=w;
+        this.tag=0;
     }
     /**
      * Empty constructor
@@ -81,15 +79,14 @@ public class edge implements edge_data {
      * return description of the data associated with this edge.
      * @return
      */
-    @Override
     public String toString() {
         return "src:"+this.src+" dest:"+this.dest+" weight:"+this.weight+" tag:"+this.tag;
     }
+
     /**
      * Allows changing the remark (meta data) associated with this edge.
      * @param s
      */
-
     @Override
     public void setInfo(String s) {
         String str = s;

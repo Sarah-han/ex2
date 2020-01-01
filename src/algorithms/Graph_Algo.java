@@ -4,20 +4,18 @@ import java.util.*;
 
 import dataStructure.*;
 
-import javax.swing.text.html.HTMLDocument;
-
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
- * @author 
+ * @author
  *
  */
-public class Graph_Algo implements graph_algorithms{
+public class Graph_Algo implements graph_algorithms,Serializable{
 	/**
 	 * private data types of the class
 	 * DGraph graph
 	 */
-private DGraph graph;
+	private graph graph;
 	/**
 	 * Compute a deep copy of this graph.
 	 * @return
@@ -43,12 +41,12 @@ private DGraph graph;
 	 */
 	@Override
 	public void init(String file_name) {
-		graph=new DGraph();
 		try
 		{
 			FileInputStream file = new FileInputStream(file_name);
 			ObjectInputStream in = new ObjectInputStream(file);
-			graph = (DGraph) in.readObject();
+			graph GA = (graph) in.readObject();
+			graph=GA;
 			in.close();
 			file.close();
 			System.out.println("Graph has been deserialized");
@@ -73,7 +71,7 @@ private DGraph graph;
 		{
 			FileOutputStream file = new FileOutputStream(file_name);
 			ObjectOutputStream out = new ObjectOutputStream(file);
-			out.writeObject(graph);
+			out.writeObject(this.graph);
 			out.close();
 			file.close();
 			System.out.println("Graph has been serialized");
@@ -116,11 +114,11 @@ private DGraph graph;
 						q.add(e.getDest());
 					}
 				}
-				q.poll();
 			} catch (Exception e) {
 				//this node has no edges
 				NullSrcNode = false;
 			}
+			q.poll();
 		}
 		if (conutTag == graph.nodeSize() && NullSrcNode) {
 			return true;
@@ -138,9 +136,11 @@ private DGraph graph;
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		List<node_data> ans=shortestPath(src,dest);
+		if(ans==null){
+			return -1;
+		}
 		return ans.get(ans.size()-1).getWeight();
 	}
-
 	/**
 	 * returns the the shortest path between src to dest - as an ordered List of nodes:
 	 * src--> n1-->n2-->...dest
@@ -197,38 +197,48 @@ private DGraph graph;
 		}
 		return ans;
 	}
-//******************************************************************************
+	//******************************************************************************
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		List<node_data> ans=new LinkedList<>();
+		int i=0;
 		node_data temp=graph.getNode(targets.get(0));
 		ans.add(temp);
-		if(isConnected()){
-			while(ans.size()!=targets.size()){
-				double MinLengthNodeLength=Integer.MAX_VALUE;
+		if(ListIsConnected(targets)){
+			while(i!=targets.size()-1&&temp.getKey()!=targets.get(targets.size()-1)){
+				double MinLengthNodeWeight=Integer.MAX_VALUE;
 				int MinLengthNode=0;
 				for (node_data nd:graph.getV()) {
-					if (shortestPathDist(temp.getKey(), nd.getKey()) < MinLengthNodeLength&&nd.getKey()!=temp.getKey()&&targets.contains(nd.getKey())&&!ans.contains(nd)) {
-						MinLengthNode = nd.getKey();
-						MinLengthNodeLength = nd.getWeight();
+					if (shortestPathDist(temp.getKey(), nd.getKey()) < MinLengthNodeWeight&&nd.getKey()!=temp.getKey()&&targets.contains(nd.getKey())) {
+						if (!CheckForTightDuplicates(ans,nd)) {
+							MinLengthNode = nd.getKey();
+							MinLengthNodeWeight = nd.getWeight();
+						}
 					}
 				}
-				ans.add(graph.getNode(MinLengthNode));
-				temp=graph.getNode(MinLengthNode);
-			}
-			/*for (int i = 0; i < ans.size()-1; i++) {
-				if (ans.get(i).getKey() == ans.get(i+1).getKey()) {
-					ans.remove(i + 1);
+				List<node_data>ShortestPath=new LinkedList<>();
+				ShortestPath=shortestPath(temp.getKey(),MinLengthNode);
+				for (int j = 0; j <ShortestPath.size() ; j++) {
+					ans.add(ShortestPath.get(j));
 				}
-			}*/
+				temp=graph.getNode(MinLengthNode);
+				i++;
+			}
+			ans.add(temp);
+			for (int k = 0; k < ans.size()-1; k++) {
+				if (ans.get(k).getKey() == ans.get(k+1).getKey()) {
+					ans.remove(k + 1);
+				}
+			}
+		}
+		else{
+			return null;
 		}
 		return ans;
 	}
-	/**
-	 * Compute a deep copy of this graph.
-	 * @return
-	 */
+
 	@Override
+
 	public graph copy() {
 		DGraph graphcopy=new DGraph();
 		Collection<node_data> nodescopy=graph.getV();
@@ -248,5 +258,59 @@ private DGraph graph;
 			}
 		}
 		return graphcopy;
+	}
+	private boolean ListIsConnected(List<Integer> target){
+		graph newgraph=new DGraph();
+		for (int i = 0; i <target.size() ; i++) {
+			newgraph.addNode(graph.getNode(target.get(i)));
+			try{
+				for (edge_data ed:graph.getE(target.get(i))) {
+					if(target.contains(ed.getDest())){
+						newgraph.connect(ed.getSrc(),ed.getDest(),ed.getWeight());
+					}
+				}
+			}
+			catch (Exception e){
+				return false;
+			}
+		}
+		int conutTag = 0;
+		boolean NullSrcNode = true;
+		for (node_data nd : newgraph.getV()) {
+			nd.setTag(0);
+		}
+		Queue<Integer> q = new LinkedList<>();
+		node_data first = newgraph.getV().iterator().next();
+		q.add(first.getKey());
+		while (!q.isEmpty()) {
+			int peek = q.peek();
+			try {
+				for (edge_data e : newgraph.getE(peek)) {
+					if (newgraph.getNode(e.getDest()).getTag() == 0) {
+						newgraph.getNode(e.getDest()).setTag(1);
+						conutTag++;
+						q.add(e.getDest());
+					}
+				}
+			} catch (Exception e) {
+				//this node has no edges
+				NullSrcNode = false;
+			}
+			q.poll();
+		}
+		if (conutTag == newgraph.nodeSize() && NullSrcNode) {
+			return true;
+		}
+		return false;
+	}
+	private boolean CheckForTightDuplicates(List<node_data>ans,node_data nd){
+		for (int k = 0; k < ans.size()-1; k++) {
+			if (ans.get(k).getKey() == ans.get(k+1).getKey()) {
+				if(ans.get(k).getKey()==nd.getKey()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

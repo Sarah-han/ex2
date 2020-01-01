@@ -2,14 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0bf76205-1ce8-49a9-9cc0-fc7a8d499efc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GraphGUI/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GraphGUI/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/JUnitTesting/DGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JUnitTesting/DGraphTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/JUnitTesting/Graph_AlgoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/JUnitTesting/Graph_AlgoTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/algorithms/Graph_Algo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/Graph_Algo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataStructure/DGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataStructure/DGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataStructure/edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataStructure/edge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataStructure/node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataStructure/node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/GraphGUI/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/GraphGUI/GUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/JUnitTesting/Graph_AlgoTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/JUnitTesting/Graph_AlgoTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/algorithms/Graph_Algo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/algorithms/Graph_Algo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/dataStructure/DGraph.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/dataStructure/DGraph.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/dataStructure/edge.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/dataStructure/edge.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/dataStructure/node.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/dataStructure/node.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,10 +40,12 @@
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -65,7 +67,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GUI">
+  <component name="RunManager" selected="JUnit.JUnitTesting in ex2">
     <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GraphGUI.GUI" />
       <module name="ex2" />
@@ -110,21 +112,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Graph_AlgoTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ex2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="JUnitTesting.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="JUnitTesting" />
-      <option name="MAIN_CLASS_NAME" value="JUnitTesting.Graph_AlgoTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Graph_AlgoTest.copy" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ex2" />
       <extension name="coverage">
@@ -141,13 +128,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="JUnitTesting in ex2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ex2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="JUnitTesting.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="JUnitTesting" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.JUnitTesting in ex2" />
         <item itemvalue="Application.GUI" />
         <item itemvalue="JUnit.Graph_AlgoTest.copy" />
         <item itemvalue="JUnit.DGraphTest.setInfo" />
         <item itemvalue="JUnit.DGraphTest" />
-        <item itemvalue="JUnit.Graph_AlgoTest" />
       </list>
     </recent_temporary>
   </component>

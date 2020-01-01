@@ -4,15 +4,32 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+/**
+ * this class implements the interface graph.
+ * represents a directional weighted graph.
+ * road-system or communication network in mind - and should support a large number of nodes (over 100,000).
+ * implementation is based on an efficient compact representation (NOT be based on a n*n matrix).
+ */
 
 public class DGraph implements graph {
+	/**
+	 * private data types of the class
+	 * first hashMap contains the nodes(vertex).
+	 * second and Third contains the edges. the data of the the hashMap is a hashMap.
+	 * int MC-counter for version number of the graph.
+	 * int NodeSize-counter for node(vertex) numbers in the graph
+	 * int EdgeSize-counter for edge numbers in the graph
+	 */
 	private HashMap<Integer, node_data> HashNode = new HashMap<>();
 	private HashMap<Integer, HashMap<Integer, edge_data>> HashEdge = new HashMap<>();
 	private int MC = 0;
 	private int NodeSize = 0;
 	private int EdgeSize = 0;
-
+	/**
+	 * return the node_data by the node_id,
+	 * @param key - the node_id
+	 * @return the node_data by the node_id, null if none.
+	 */
 	@Override
 	public node_data getNode(int key) {
 		if (HashNode.get(key) == null) {
@@ -20,7 +37,13 @@ public class DGraph implements graph {
 		}
 		return this.HashNode.get(key);
 	}
-
+	/**
+	 * return the data of the edge (src,dest), null if none.
+	 *run in O(1) time.
+	 * @param src
+	 * @param dest
+	 * @return
+	 */
 	@Override
 	public edge_data getEdge(int src, int dest) {
 		if (HashEdge.get(src).get(dest) == null) {
@@ -28,7 +51,11 @@ public class DGraph implements graph {
 		}
 		return this.HashEdge.get(src).get(dest);
 	}
-
+	/**
+	 * add a new node to the graph with the given node_data.
+	 *run in O(1) time.
+	 * @param n
+	 */
 	@Override
 	public void addNode(node_data n) {
 		if (!(HashNode.containsKey(n.getKey()))) {
@@ -40,7 +67,17 @@ public class DGraph implements graph {
 		}
 
 	}
-
+	/**
+	 * Connect an edge with weight w between node src to node dest.
+	 * run in O(1) time.
+	 * @param src - the source of the edge.
+	 * @param dest - the destination of the edge.
+	 * @param w - positive weight representing the cost (aka time, price, etc) between src-->dest.
+	 *check if the src == dest, if so no need to connect.
+	 *check if the src exist,check if the dest exist,if not return Runtime Exception.
+	 *else create a new edge.
+	 *update edge size
+	 */
 	@Override
 	public void connect(int src, int dest, double w) {
 		boolean b=true;
@@ -67,17 +104,40 @@ public class DGraph implements graph {
 			}
 		} else if(b){throw new RuntimeException("src/dest does not exist!");}
 	}
-
+	/**
+	 * This method return a pointer (shallow copy) for the
+	 * collection representing all the nodes in the graph.
+	 * run in O(1) time.
+	 * @return Collection<node_data>
+	 * using a HashMap function that return collection.
+	 */
 	@Override
 	public Collection<node_data> getV() {
 		return this.HashNode.values();
 	}
-
+	/**
+	 * This method return a pointer (shallow copy) for the
+	 * collection representing all the edges getting out of
+	 * the given node (all the edges starting (source) at the given node).
+	 *run in O(1) time.
+	 * @return Collection<edge_data>
+	 * using a HashMap function that return collection.
+	 */
 	@Override
 	public Collection<edge_data> getE(int node_id) {
 		return HashEdge.get(node_id).values();
 	}
-
+	/**
+	 * Delete the node (with the given ID) from the graph -
+	 * and removes all edges which starts or ends at this node.
+	 *run in O(n), |V|=n, as all the edges should be removed.
+	 * @return the data of the removed node (null if none).
+	 * @param key
+	 * if the node exist delete all edge the node is src or dest.
+	 * update edge size.
+	 * delete the node .
+	 * update node size.
+	 */
 	@Override
 	public node_data removeNode(int key) {
 		node_data temp;
@@ -101,6 +161,14 @@ public class DGraph implements graph {
 		NodeSize--;
 		return temp;
 	}
+	/**
+	 * Delete the edge from the graph,
+	 *run in O(1) time.
+	 * @param src
+	 * @param dest
+	 * @return the data of the removed edge (null if none).
+	 * remove the edge if exist from the HashMap. update edge size
+	 */
 
 	@Override
 	public edge_data removeEdge(int src, int dest) {
@@ -115,19 +183,29 @@ public class DGraph implements graph {
 		}
 		return e;
 	}
-
+	/** return the number of vertices (nodes) in the graph.
+	 *run in O(1) time.
+	 * @return
+	 */
 	@Override
 	public int nodeSize() {
 
 		return this.NodeSize;
 	}
-
+	/**
+	 * return the number of edges (assume directional graph).
+	 *run in O(1) time.
+	 * @return
+	 */
 	@Override
 	public int edgeSize() {
 
 		return this.EdgeSize;
 	}
-
+	/**
+	 * return the Mode Count - for testing changes in the graph.
+	 * @return
+	 */
 	@Override
 	public int getMC() {
 

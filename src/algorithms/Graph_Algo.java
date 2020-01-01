@@ -13,7 +13,15 @@ import javax.swing.text.html.HTMLDocument;
  *
  */
 public class Graph_Algo implements graph_algorithms{
+	/**
+	 * private data types of the class
+	 * DGraph graph
+	 */
 private DGraph graph;
+	/**
+	 * Compute a deep copy of this graph.
+	 * @return
+	 */
 	@Override
 	public void init(graph g) {
 		graph=new DGraph();
@@ -29,6 +37,10 @@ private DGraph graph;
 			}
 		}
 	}
+	/**
+	 * Init a graph from file
+	 * @param file_name
+	 */
 	@Override
 	public void init(String file_name) {
 		graph=new DGraph();
@@ -51,7 +63,10 @@ private DGraph graph;
 		}
 
 	}
-
+	/** Saves the graph to a file.
+	 *
+	 * @param file_name
+	 */
 	@Override
 	public void save(String file_name) {
 		try
@@ -68,7 +83,19 @@ private DGraph graph;
 			System.out.println("IOException is caught");
 		}
 	}
-
+	/**
+	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
+	 * other node.
+	 * NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
+	 * the algorithm the function is based on is https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+	 * take the start node and enters him and his neighbor to a Linked List.
+	 * remove the peek node and enters the neighbor of the first in the list.
+	 * the purpose is to close a circle with the first node (we save his data).
+	 * if a circle i complete the graph is connected.
+	 * else not.
+	 * @return
+	 *
+	 */
 	@Override
 	public boolean isConnected() {
 		int conutTag = 0;
@@ -100,12 +127,34 @@ private DGraph graph;
 		}
 		return false;
 	}
-
+	/**
+	 * returns the length of the shortest path between src to dest
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * use the shortestPath function and compute the weight.
+	 * if not found return -1.
+	 * @return
+	 */
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		List<node_data> ans=shortestPath(src,dest);
 		return ans.get(ans.size()-1).getWeight();
 	}
+
+	/**
+	 * returns the the shortest path between src to dest - as an ordered List of nodes:
+	 * src--> n1-->n2-->...dest
+	 * see: https://en.wikipedia.org/wiki/Shortest_path_problem
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * we use the same idea of the isConnected() function for visiting all nodes in the graph.
+	 * while visiting each node we update the weight and save which node gave us the weight.
+	 * after visiting all the nodes we go to the dest, enter the arr who gave him the weight.
+	 * go to this node and enter the arr who gave him the weight and so on until the src.
+	 * we revers the order to return the list in the right order.
+	 * if way is not found return null.
+	 * @return
+	 */
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> Path=new LinkedList<>();
@@ -148,7 +197,7 @@ private DGraph graph;
 		}
 		return ans;
 	}
-
+//******************************************************************************
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		List<node_data> ans=new LinkedList<>();
@@ -175,9 +224,11 @@ private DGraph graph;
 		}
 		return ans;
 	}
-
+	/**
+	 * Compute a deep copy of this graph.
+	 * @return
+	 */
 	@Override
-
 	public graph copy() {
 		DGraph graphcopy=new DGraph();
 		Collection<node_data> nodescopy=graph.getV();

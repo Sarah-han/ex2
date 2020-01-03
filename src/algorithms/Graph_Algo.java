@@ -139,6 +139,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		if(ans==null){
 			return -1;
 		}
+		if(ans.size()==0){
+			return 0;
+		}
 		return ans.get(ans.size()-1).getWeight();
 	}
 	/**
@@ -158,6 +161,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> Path=new LinkedList<>();
+		if(src==dest) return Path;
 		Queue<Integer> q=new LinkedList<>();
 		for (node_data nd:graph.getV()) {
 			nd.setTag(0);
@@ -197,10 +201,26 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}
 		return ans;
 	}
-	//******************************************************************************
+
+	/**
+	 * this TSP Method Would check if the List of Targets given is "isConnected" and then Would return approximately
+	 * the shortest Path Between all targets list, if there is duplicates in targets list it would count all the duplicates as one
+	 * because we need to pass all the dots of the list min one time and it doesnt matter if some node key is given 10 times or just one
+	 * because we already pass on him once.
+	 * if there is no Exist short path or the targets List in not connected, the Method return null.
+	 * @param targets List of targets we Should return an approximately the shortest path between.
+	 * @return an approximately the shortest path between given targets list
+	 */
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		List<node_data> ans=new LinkedList<>();
+		List<Integer> targets_no_duplicates=new LinkedList<>();
+		for (int i = 0; i <targets.size() ; i++) {
+			if(!targets_no_duplicates.contains(graph.getNode(targets.get(i)).getKey())){
+				targets_no_duplicates.add(graph.getNode(targets.get(i)).getKey());
+			}
+		}
+		targets=targets_no_duplicates;
+		List<node_data>ans=new LinkedList<>();
 		int i=0;
 		node_data temp=graph.getNode(targets.get(0));
 		ans.add(temp);
@@ -237,8 +257,11 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return ans;
 	}
 
+	/**
+	 * This method return a deep copy of our Graph
+	 * @return a deep copy of our Graph
+	 */
 	@Override
-
 	public graph copy() {
 		DGraph graphcopy=new DGraph();
 		Collection<node_data> nodescopy=graph.getV();
@@ -259,16 +282,19 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}
 		return graphcopy;
 	}
+
+	//**************PRIVATE METHODS**************//
+
 	private boolean ListIsConnected(List<Integer> target){
 		graph newgraph=new DGraph();
 		for (int i = 0; i <target.size() ; i++) {
-			newgraph.addNode(graph.getNode(target.get(i)));
+				newgraph.addNode(graph.getNode(target.get(i)));
 			try{
-				for (edge_data ed:graph.getE(target.get(i))) {
-					if(target.contains(ed.getDest())){
-						newgraph.connect(ed.getSrc(),ed.getDest(),ed.getWeight());
+					for (edge_data ed : graph.getE(target.get(i))) {
+						if (target.contains(ed.getDest())) {
+							newgraph.connect(ed.getSrc(), ed.getDest(), ed.getWeight());
+						}
 					}
-				}
 			}
 			catch (Exception e){
 				return false;

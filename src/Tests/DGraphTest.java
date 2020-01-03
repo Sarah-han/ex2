@@ -1,4 +1,4 @@
-package JUnitTesting;
+package Tests;
 import dataStructure.*;
 
 import org.junit.jupiter.api.BeforeEach;

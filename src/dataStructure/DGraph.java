@@ -1,5 +1,7 @@
 package dataStructure;
 
+import GraphGUI.GUI;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;

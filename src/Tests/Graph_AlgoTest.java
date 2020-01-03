@@ -1,4 +1,4 @@
-package JUnitTesting;
+package Tests;
 import algorithms.Graph_Algo;
 import dataStructure.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,6 +64,7 @@ class Graph_AlgoTest {
         List<Integer>lst=new LinkedList<>();
         lst.add(10);
         lst.add(13);
+        lst.add(10);
         lst.add(14);
         lst.add(11);
         System.out.println(TestGraph.TSP(lst));

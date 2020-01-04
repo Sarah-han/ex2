@@ -121,6 +121,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 */
 	@Override
 	public boolean isConnected() {
+		if(graph.getV().size()==0){
+			return true;
+		}
 		int conutTag = 0;
 		boolean NullSrcNode = true;
 		for (node_data nd : graph.getV()) {

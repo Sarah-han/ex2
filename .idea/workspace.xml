@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0bf76205-1ce8-49a9-9cc0-fc7a8d499efc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GraphGUI/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/algorithms/Graph_Algo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/algorithms/Graph_Algo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ex2/dataStructure/DGraph.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ex2/dataStructure/DGraph.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/algorithms/Graph_Algo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/Graph_Algo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataStructure/DGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataStructure/DGraph.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,7 +63,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GUI">
+  <component name="RunManager" selected="JUnit.Ex2Test">
     <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="gui.GUI" />
       <module name="ex2" />
@@ -77,7 +77,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DGraphTest.setInfo" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Ex2Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ex2" />
       <extension name="coverage">
         <pattern>
@@ -86,9 +86,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Tests" />
-      <option name="MAIN_CLASS_NAME" value="Tests.DGraphTest" />
-      <option name="METHOD_NAME" value="setInfo" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="Tests.Ex2Test" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -141,11 +140,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.Ex2Test" />
         <item itemvalue="Application.GUI" />
         <item itemvalue="JUnit.Graph_AlgoTest.TSP" />
         <item itemvalue="JUnit.Tests in ex2" />
         <item itemvalue="JUnit.Graph_AlgoTest.copy" />
-        <item itemvalue="JUnit.DGraphTest.setInfo" />
       </list>
     </recent_temporary>
   </component>

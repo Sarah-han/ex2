@@ -1,4 +1,4 @@
-package GraphGUI;
+package gui;
 import algorithms.Graph_Algo;
 import dataStructure.*;
 import utils.*;
@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,6 +71,11 @@ public class GUI extends JFrame implements ActionListener {
         graph.connect(11, 10, 4.5);
         graph.connect(13, 10, 8);
 
+        GUI gui = new GUI();
+        gui.setVisible(true);
+    }
+    public void Init(graph g){
+        graph=g;
         GUI gui = new GUI();
         gui.setVisible(true);
     }

@@ -16,6 +16,31 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 * DGraph graph
 	 */
 	private graph graph;
+
+	/**
+	 * a simple Constructor that Initialized a graph into Graph_algo graph
+	 * @param g simple graph
+	 */
+	public Graph_Algo(graph g) {
+		graph=new DGraph();
+		for(node_data nodes : g.getV()){
+			graph.addNode(nodes);
+			try {
+				for (edge_data edges : g.getE(nodes.getKey())) {
+					graph.connect(edges.getSrc(), edges.getDest(), edges.getWeight());
+				}
+			}
+			catch (Exception e){
+				//this node has no edges, the graph is still being initialized...
+			}
+		}
+	}
+
+	/**
+	 * Empty Constructor
+	 */
+	public Graph_Algo(){}
+
 	/**
 	 * Compute a deep copy of this graph.
 	 * @return

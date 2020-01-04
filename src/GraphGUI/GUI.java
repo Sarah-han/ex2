@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GUI extends JFrame implements ActionListener {
     private static graph graph;
@@ -16,6 +19,8 @@ public class GUI extends JFrame implements ActionListener {
     private JButton shortestpathdist;
     private JButton shortestpath;
     private JButton load;
+    private boolean paintActionPerformed;
+    private List<node_data> ans;
 
 
 
@@ -49,8 +54,8 @@ public class GUI extends JFrame implements ActionListener {
         graph.connect(10,8,7);
         graph.connect(10,6,2);
         graph.connect(9,5,3);
-        graph.connect(2,5,21);
-        */graph.addNode(new node(10, new Point3D(350, 400, 350), 0));
+        graph.connect(2,5,21);*/
+        graph.addNode(new node(10, new Point3D(350, 400, 350), 0));
         graph.addNode(new node(11, new Point3D(35, 325, 50), 0));
         graph.addNode(new node(12, new Point3D(550, 400, 140), 0));
         graph.addNode(new node(13, new Point3D(630, 650, 350), 0));
@@ -72,6 +77,8 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public GUI() {
+        paintActionPerformed=false;
+        ans=new LinkedList<>();
         INITGUI();
     }
 
@@ -89,7 +96,7 @@ public class GUI extends JFrame implements ActionListener {
         MenuItem TSP = new MenuItem("TSP");
         MenuItem ShortestPath = new MenuItem("ShortestPath");
         MenuItem isConnected = new MenuItem("isConnected");
-        MenuItem ShortestPatchDist = new MenuItem("ShortestPatchDist");
+        MenuItem ShortestPathDist = new MenuItem("ShortestPathDist");
         save=new JButton("save");
         load=new JButton("load");
         isconnected=new JButton("isconnected");
@@ -101,13 +108,13 @@ public class GUI extends JFrame implements ActionListener {
         Algo.add(TSP);
         Algo.add(ShortestPath);
         Algo.add(isConnected);
-        Algo.add(ShortestPatchDist);
+        Algo.add(ShortestPathDist);
         Save.addActionListener(this);
         Load.addActionListener(this);
         TSP.addActionListener(this);
         ShortestPath.addActionListener(this);
         isConnected.addActionListener(this);
-        ShortestPatchDist.addActionListener(this);
+        ShortestPathDist.addActionListener(this);
     }
 
     public void paint(Graphics g) {
@@ -134,6 +141,14 @@ public class GUI extends JFrame implements ActionListener {
             catch(Exception e){
                 //this node has no edges, the graph is still being initialized...
             }
+            if(paintActionPerformed){
+                g.setColor(Color.BLUE);
+                for (int i=0;i<ans.size()-1;i++){
+                    Point3D Path_Start = ans.get(i).getLocation();
+                    Point3D Path_End= ans.get(i+1).getLocation();
+                    g.drawLine((int) Path_Start.x(), (int) Path_Start.y(), (int) Path_End.x(), (int) Path_End.y());
+                }
+            }
         }
     }
 
@@ -141,6 +156,8 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String str = e.getActionCommand();
         if (str.equals("Save")) {
+            paintActionPerformed=false;
+            repaint();
             JFileChooser fileChooser = new JFileChooser();
             Graph_Algo ga = new Graph_Algo();
             ga.init(graph);
@@ -154,6 +171,8 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
         if (str.equals("Load")) {
+            paintActionPerformed=false;
+            repaint();
             JFileChooser fileChooser = new JFileChooser();
             Graph_Algo ga = new Graph_Algo();
             int retval = fileChooser.showOpenDialog(load);
@@ -169,11 +188,176 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
         if (str.equals("TSP")) {
+            paintActionPerformed=false;
+            repaint();
+            boolean InvalidNode=false;boolean ContinueTSP=true;
+            JFrame tsp = new JFrame();
+            List<Integer>lst=new LinkedList<>();
+            try {
+                String src = (JOptionPane.showInputDialog(tsp, "Enter Nodes key right Below Separated by ',' to finish the list put '.'"));
+                src=src.replaceAll(" ","");
+                int j=0;
+                if(src.contains(",")&&src.contains(".")) {
+                    for (int i = 0; i < src.length(); i++) {
+                        if (src.charAt(i) == ',') {
+                            if (graph.getNode(Integer.parseInt(src.substring(j, i))) != null) {
+                                lst.add(Integer.parseInt(src.substring(j, i)));
+                                j = i + 1;
+                            } else {
+                                InvalidNode = true;
+                                throw new RuntimeException("Node Entered are nor in the graph");
+                            }
+                        }
+                        if (src.charAt(i) == '.') {
+                            if (graph.getNode(Integer.parseInt(src.substring(j, i))) != null) {
+                                lst.add(Integer.parseInt(src.substring(j, i)));
+                            } else {
+                                InvalidNode = true;
+                                throw new RuntimeException("Node Entered are nor in the graph");
+                            }
+                            break;
+                        }
+                    }
+                }
+                else throw new RuntimeException("String Doesn't have ',' and '.' ");
+                if(lst.size()==0){
+                    throw new RuntimeException("lst is Empty");
+                }
+            } catch (Exception exception) {
+                ContinueTSP=false;
+                if(!InvalidNode){
+                    JOptionPane.showMessageDialog(tsp, "Invalid Pattern/Not entered any Number");
+                    exception.printStackTrace();
+                }
+                else{
+                    JOptionPane.showMessageDialog(tsp, "some of the Nodes that you Entered are not in the graph!");
+                }
+            }
+            try {
+                if (ContinueTSP) {
+                    Graph_Algo ga = new Graph_Algo();
+                    ga.init(graph);
+                    ans = ga.TSP(lst);
+                    if (ans != null) {
+                        if (ans.size() == 1) {
+                            JOptionPane.showMessageDialog(tsp, "List Should be at least 2 targets!");
+                        } else {
+                            String string="";
+                            for(int i=0;i<ans.size();i++){
+                                string+=ans.get(i).getKey();
+                                if(i!=ans.size()-1){
+                                    string+="-->";
+                                }
+                            }
+                            paintActionPerformed = true;
+                            repaint();
+                            JOptionPane.showMessageDialog(tsp, "The TSP Path is: "+string);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(tsp, "targets entered are not isConnected!");
+                    }
+                }
+            } catch (Exception exception) {
+                System.out.println("Cannot Operate TSP!");
+                exception.printStackTrace();
+            }
         }
         if (str.equals("isConnected")) {
-            JFrame isConnected=new JFrame();
+            paintActionPerformed=false;
+            repaint();
+            try {
+                JFrame isconnected = new JFrame();
+                Graph_Algo ga = new Graph_Algo();
+                ga.init(graph);
+                if (ga.isConnected()) {
+                    JOptionPane.showMessageDialog(isconnected, "Current Graph isConnected!");
+                } else {
+                    JOptionPane.showMessageDialog(isconnected, "Current Graph is Not Connected!");
+                }
+            }
+            catch(Exception exception){
+                System.out.println("Cannot Operate isConnected!");
+                exception.printStackTrace();
+            }
         }
         if (str.equals("ShortestPath")) {
+            paintActionPerformed = false;
+            repaint();
+            JFrame shortestpath = new JFrame();
+            int Source = Integer.MIN_VALUE + 1;
+            int Destination = Integer.MIN_VALUE + 1;
+            try {
+                Source = Integer.parseInt(JOptionPane.showInputDialog(shortestpath, "Enter src from current graph"));
+                Destination = Integer.parseInt(JOptionPane.showInputDialog(shortestpath, "Enter dest from current graph"));
+                if (graph.getNode(Source) == null && graph.getNode(Destination) == null) {
+                    JOptionPane.showMessageDialog(shortestpath, "The Source or Destination keys you Entered are not in the Current Graph!");
+                    throw new RuntimeException();
+                }
+            } catch (NumberFormatException exception) {
+                JOptionPane.showMessageDialog(shortestpath, "Invalid Number/Not entered any Number");
+                exception.printStackTrace();
+            }
+            try {
+                Graph_Algo ga = new Graph_Algo();
+                ga.init(graph);
+                ans = ga.shortestPath(Source, Destination);
+                if (ans != null) {
+                    if(ans.size()>0) {
+                        String string = "";
+                        for (int i = 0; i < ans.size(); i++) {
+                            string += ans.get(i).getKey();
+                            if (i != ans.size() - 1) {
+                                string += "-->";
+                            }
+                        }
+                        paintActionPerformed = true;
+                        repaint();
+                        JOptionPane.showMessageDialog(tsp, "The Shortest Path is: " + string);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(shortestpath, "Source = Destination and The Path is 0");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(shortestpath, "There is no Path Between the Source and Destination");
+                }
+            } catch (Exception exception) {
+                System.out.println("Cannot Operate ShortestPath!");
+                exception.printStackTrace();
+            }
+        }
+        if (str.equals("ShortestPathDist")) {
+            paintActionPerformed=false;
+            repaint();
+            JFrame shortestpathdist = new JFrame();
+            int Source=Integer.MIN_VALUE+1;
+            int Destination=Integer.MIN_VALUE+1;
+            try {
+                Source = Integer.parseInt(JOptionPane.showInputDialog(shortestpathdist, "Enter src from current graph"));
+                Destination = Integer.parseInt(JOptionPane.showInputDialog(shortestpathdist, "Enter dest from current graph"));
+                if(graph.getNode(Source)==null&&graph.getNode(Destination)==null){
+                    JOptionPane.showMessageDialog(shortestpathdist,"The Source or Destination keys you Entered are not in the Current Graph!");
+                    throw new RuntimeException();
+                }
+            }
+            catch (NumberFormatException exception){
+                JOptionPane.showMessageDialog(shortestpathdist,"Invalid Number/Not entered any Number");
+                exception.printStackTrace();
+            }
+            try{
+                Graph_Algo ga=new Graph_Algo();
+                ga.init(graph);
+                Double answer=ga.shortestPathDist(Source,Destination);
+                if(answer!=Integer.MAX_VALUE) {
+                    JOptionPane.showMessageDialog(shortestpathdist,"The Weight of the Path you entered is: "+answer);
+                }
+                else{
+                    JOptionPane.showMessageDialog(shortestpathdist,"There is no Path Between the Source and Destination you Entered!");
+                }
+            }
+            catch(Exception exception){
+                System.out.println("Cannot Operate ShortestPathDist!");
+                exception.printStackTrace();
+            }
         }
     }
 }

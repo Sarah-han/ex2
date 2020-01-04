@@ -137,7 +137,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	public double shortestPathDist(int src, int dest) {
 		List<node_data> ans=shortestPath(src,dest);
 		if(ans==null){
-			return -1;
+			return Integer.MAX_VALUE;
 		}
 		if(ans.size()==0){
 			return 0;
@@ -221,6 +221,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}
 		targets=targets_no_duplicates;
 		List<node_data>ans=new LinkedList<>();
+		if(targets.size()==1){
+			ans.add(graph.getNode(targets.get(0)));
+			return ans;
+		}
 		int i=0;
 		node_data temp=graph.getNode(targets.get(0));
 		ans.add(temp);

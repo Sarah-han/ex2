@@ -20,7 +20,7 @@ public class GUI extends JFrame implements ActionListener {
     private JButton load;
     private boolean paintActionPerformed;
     private List<node_data> ans;
-    //private int MC;
+    private int MC;
 
 
 
@@ -78,7 +78,7 @@ public class GUI extends JFrame implements ActionListener {
     }*/
     public void Init(graph g){
         graph=g;
-        //this.MC=g.getMC();
+        this.MC=g.getMC();
         GUI gui = new GUI();
         gui.setVisible(true);
     }
@@ -86,6 +86,7 @@ public class GUI extends JFrame implements ActionListener {
     public GUI() {
         paintActionPerformed=false;
         ans=new LinkedList<>();
+        //this.MC=graph.getMC();
         INITGUI();
     }
 
@@ -122,7 +123,20 @@ public class GUI extends JFrame implements ActionListener {
         ShortestPath.addActionListener(this);
         isConnected.addActionListener(this);
         ShortestPathDist.addActionListener(this);
-        //this.MCThread();
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    synchronized (this) {
+                        if (graph.getMC() != MC) {
+                            MC = graph.getMC();
+                            repaint();
+                        }
+                    }
+                }
+            }
+        });
+        th.start();
     }
 
     public void paint(Graphics g) {
@@ -289,6 +303,7 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
         if (str.equals("ShortestPath")) {
+            boolean b=false;
             paintActionPerformed = false;
             repaint();
             JFrame shortestpath = new JFrame();
@@ -302,6 +317,7 @@ public class GUI extends JFrame implements ActionListener {
                     throw new RuntimeException();
                 }
             } catch (NumberFormatException exception) {
+                b=true;
                 JOptionPane.showMessageDialog(shortestpath, "Invalid Number/Not entered any Number");
                 exception.printStackTrace();
             }
@@ -323,6 +339,7 @@ public class GUI extends JFrame implements ActionListener {
                         JOptionPane.showMessageDialog(tsp, "The Shortest Path is: " + string);
                     }
                     else{
+                        if(!b)
                         JOptionPane.showMessageDialog(shortestpath, "Source = Destination and The Path is 0");
                     }
                 } else {
@@ -334,6 +351,7 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
         if (str.equals("ShortestPathDist")) {
+            boolean b=false;
             paintActionPerformed=false;
             repaint();
             JFrame shortestpathdist = new JFrame();
@@ -348,6 +366,7 @@ public class GUI extends JFrame implements ActionListener {
                 }
             }
             catch (NumberFormatException exception){
+                b=true;
                 JOptionPane.showMessageDialog(shortestpathdist,"Invalid Number/Not entered any Number");
                 exception.printStackTrace();
             }
@@ -356,6 +375,7 @@ public class GUI extends JFrame implements ActionListener {
                 ga.init(graph);
                 Double answer=ga.shortestPathDist(Source,Destination);
                 if(answer!=Integer.MAX_VALUE) {
+                    if(!b)
                     JOptionPane.showMessageDialog(shortestpathdist,"The Weight of the Path you entered is: "+answer);
                 }
                 else{
@@ -368,20 +388,4 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
     }
-/*    private void MCThread() {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    synchronized (graph) {
-                        if (graph.getMC() != MC) {
-                            MC = graph.getMC();
-                            repaint();
-                        }
-                    }
-                }
-            }
-        });
-        t.start();
-    }*/
 }

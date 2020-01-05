@@ -9,6 +9,8 @@ public class Gui_Main {
     private static graph graph;
     public static void main(String[] args) {
         graph = new DGraph();
+        GUI g = new GUI();
+        g.Init(graph);
         /*graph.addNode(new node(1, new Point3D(350, 400, 350), 0));
         graph.addNode(new node(2, new Point3D(35, 325, 50), 0));
         graph.addNode(new node(3, new Point3D(250, 70, 10), 0));
@@ -43,7 +45,6 @@ public class Gui_Main {
         graph.addNode(new node(12, new Point3D(550, 400, 140), 0));
         graph.addNode(new node(13, new Point3D(630, 650, 350), 0));
         graph.addNode(new node(14, new Point3D(800, 100, 250), 0));
-        graph.addNode(new node(15, new Point3D(300, 300, 350), 0));
         graph.connect(10, 13, 4);
         graph.connect(10, 11, 4.5);
         graph.connect(10, 14, 1);
@@ -57,7 +58,5 @@ public class Gui_Main {
         graph.connect(13, 10, 8);
 /*        GUI gui = new GUI();
         gui.setVisible(true);*/
-        GUI g = new GUI();
-        g.Init(graph);
     }
 }

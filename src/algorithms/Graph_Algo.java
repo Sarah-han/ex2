@@ -256,7 +256,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		int i=0;
 		node_data temp=graph.getNode(targets.get(0));
 		ans.add(temp);
-		if(ListIsConnected(targets)){
+		if(ListIsConnected(targets)||isConnected()){
 			while(i!=targets.size()-1&&temp.getKey()!=targets.get(targets.size()-1)){
 				double MinLengthNodeWeight=Integer.MAX_VALUE;
 				int MinLengthNode=0;

@@ -20,12 +20,13 @@ public class GUI extends JFrame implements ActionListener {
     private JButton load;
     private boolean paintActionPerformed;
     private List<node_data> ans;
+    //private int MC;
 
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         graph = new DGraph();
-        /*graph.addNode(new node(1, new Point3D(350, 400, 350), 0));
+        *//*graph.addNode(new node(1, new Point3D(350, 400, 350), 0));
         graph.addNode(new node(2, new Point3D(35, 325, 50), 0));
         graph.addNode(new node(3, new Point3D(250, 70, 10), 0));
         graph.addNode(new node(4, new Point3D(550, 400, 140), 0));
@@ -53,12 +54,13 @@ public class GUI extends JFrame implements ActionListener {
         graph.connect(10,8,7);
         graph.connect(10,6,2);
         graph.connect(9,5,3);
-        graph.connect(2,5,21);*/
+        graph.connect(2,5,21);*//*
         graph.addNode(new node(10, new Point3D(350, 400, 350), 0));
         graph.addNode(new node(11, new Point3D(35, 325, 50), 0));
         graph.addNode(new node(12, new Point3D(550, 400, 140), 0));
         graph.addNode(new node(13, new Point3D(630, 650, 350), 0));
         graph.addNode(new node(14, new Point3D(800, 100, 250), 0));
+        graph.addNode(new node(15, new Point3D(300, 300, 350), 0));
         graph.connect(10, 13, 4);
         graph.connect(10, 11, 4.5);
         graph.connect(10, 14, 1);
@@ -70,12 +72,13 @@ public class GUI extends JFrame implements ActionListener {
         graph.connect(14, 13, 2);
         graph.connect(11, 10, 4.5);
         graph.connect(13, 10, 8);
-
         GUI gui = new GUI();
         gui.setVisible(true);
-    }
+        MC=graph.getMC();
+    }*/
     public void Init(graph g){
         graph=g;
+        //this.MC=g.getMC();
         GUI gui = new GUI();
         gui.setVisible(true);
     }
@@ -119,6 +122,7 @@ public class GUI extends JFrame implements ActionListener {
         ShortestPath.addActionListener(this);
         isConnected.addActionListener(this);
         ShortestPathDist.addActionListener(this);
+        //this.MCThread();
     }
 
     public void paint(Graphics g) {
@@ -293,7 +297,7 @@ public class GUI extends JFrame implements ActionListener {
             try {
                 Source = Integer.parseInt(JOptionPane.showInputDialog(shortestpath, "Enter src from current graph"));
                 Destination = Integer.parseInt(JOptionPane.showInputDialog(shortestpath, "Enter dest from current graph"));
-                if (graph.getNode(Source) == null && graph.getNode(Destination) == null) {
+                if (graph.getNode(Source) == null || graph.getNode(Destination) == null) {
                     JOptionPane.showMessageDialog(shortestpath, "The Source or Destination keys you Entered are not in the Current Graph!");
                     throw new RuntimeException();
                 }
@@ -338,7 +342,7 @@ public class GUI extends JFrame implements ActionListener {
             try {
                 Source = Integer.parseInt(JOptionPane.showInputDialog(shortestpathdist, "Enter src from current graph"));
                 Destination = Integer.parseInt(JOptionPane.showInputDialog(shortestpathdist, "Enter dest from current graph"));
-                if(graph.getNode(Source)==null&&graph.getNode(Destination)==null){
+                if(graph.getNode(Source)==null||graph.getNode(Destination)==null){
                     JOptionPane.showMessageDialog(shortestpathdist,"The Source or Destination keys you Entered are not in the Current Graph!");
                     throw new RuntimeException();
                 }
@@ -364,4 +368,20 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
     }
+/*    private void MCThread() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    synchronized (graph) {
+                        if (graph.getMC() != MC) {
+                            MC = graph.getMC();
+                            repaint();
+                        }
+                    }
+                }
+            }
+        });
+        t.start();
+    }*/
 }
